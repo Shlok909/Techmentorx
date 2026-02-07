@@ -6,11 +6,15 @@ import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { DonationList } from '@/components/DonationList';
 import { useDonations } from '@/hooks/use-donations';
-import { Search, Globe } from 'lucide-react';
+import { useVolunteerStats } from '@/hooks/use-volunteer-stats';
+import { VolunteerStatsCard } from '@/components/VolunteerStatsCard';
+import { Search, Globe, Truck } from 'lucide-react';
+import { DonationStatus } from '@/types/donation';
 
 export default function VolunteerDashboard() {
   const router = useRouter();
   const { donations, updateDonationStatus, isLoaded } = useDonations();
+  const { stats, completeDelivery } = useVolunteerStats();
 
   useEffect(() => {
     const role = localStorage.getItem('mentorlink_role');
@@ -20,32 +24,48 @@ export default function VolunteerDashboard() {
 
   if (!isLoaded) return null;
 
+  const handleUpdateStatus = (id: string, newStatus: DonationStatus) => {
+    const currentDonation = donations.find(d => d.id === id);
+    if (!currentDonation) return;
+
+    // Track if this delivery is completing
+    if (newStatus === 'DELIVERED' && currentDonation.status !== 'DELIVERED') {
+      completeDelivery();
+    }
+    
+    updateDonationStatus(id, newStatus);
+  };
+
   const activeDonationsCount = donations.filter(d => d.status !== 'DELIVERED').length;
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="space-y-8">
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-primary/10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-secondary/30 rounded-lg">
-                <Globe className="w-6 h-6 text-secondary-foreground" />
+      <main className="container mx-auto px-4 py-8">
+        <div className="grid lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-primary/10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-secondary/30 rounded-lg">
+                  <Globe className="w-5 h-5 text-secondary-foreground" />
+                </div>
+                <h1 className="text-2xl font-headline font-black">Volunteer Hub</h1>
               </div>
-              <h1 className="text-3xl font-headline font-black">Find Resources</h1>
+              <p className="text-muted-foreground text-sm">
+                Help deliver items to students in your community. Each successful delivery earns you points and badges!
+              </p>
             </div>
-            <p className="text-muted-foreground text-lg">
-              Browse items posted by community donors. Help deliver items to students or claim resources for your studies.
-            </p>
+
+            <VolunteerStatsCard stats={stats} />
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Search className="w-5 h-5 text-primary" />
-                <h2 className="text-xl font-headline font-bold">Manage Deliveries</h2>
+                <Truck className="w-6 h-6 text-primary" />
+                <h2 className="text-xl font-headline font-bold">Available Tasks</h2>
               </div>
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider bg-white px-3 py-1 rounded-full border shadow-sm">
                 {activeDonationsCount} active tasks
               </span>
             </div>
@@ -53,7 +73,7 @@ export default function VolunteerDashboard() {
             <DonationList 
               donations={donations} 
               role="volunteer" 
-              onUpdateStatus={updateDonationStatus} 
+              onUpdateStatus={handleUpdateStatus} 
             />
           </div>
         </div>
