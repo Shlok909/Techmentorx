@@ -1,0 +1,23 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Abstract community support background",
+      "imageUrl": "https://picsum.photos/seed/mentor1/1200/800",
+      "imageHint": "community support"
+    },
+    {
+      "id": "donor-img",
+      "description": "Hands giving a gift",
+      "imageUrl": "https://picsum.photos/seed/donor/600/400",
+      "imageHint": "giving donation"
+    },
+    {
+      "id": "volunteer-img",
+      "description": "Students working together",
+      "imageUrl": "https://picsum.photos/seed/volunteer/600/400",
+      "imageHint": "student volunteer"
+    }
+  ]
+}
