@@ -10,13 +10,13 @@
     {
       "id": "donor-img",
       "description": "I am a Donor image",
-      "imageUrl": "https://ibb.co/7tdWb32G",
+      "imageUrl": "https://i.pinimg.com/1200x/58/20/00/582000b165920e8aa3e467ea5f2ebe19.jpg",
       "imageHint": "giving donation"
     },
     {
       "id": "volunteer-img",
       "description": "I am a Volunteer image",
-      "imageUrl": "https://ibb.co/357x6GVV",
+      "imageUrl": "https://i.pinimg.com/1200x/6d/0b/76/6d0b7670918099732fd087ff78d4c2f1.jpg",
       "imageHint": "student volunteer"
     }
   ]
