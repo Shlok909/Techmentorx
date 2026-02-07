@@ -9,14 +9,14 @@
     },
     {
       "id": "donor-img",
-      "description": "Hands giving a gift",
-      "imageUrl": "https://picsum.photos/seed/donor/600/400",
+      "description": "I am a Donor image",
+      "imageUrl": "https://ibb.co/7tdWb32G",
       "imageHint": "giving donation"
     },
     {
       "id": "volunteer-img",
-      "description": "Students working together",
-      "imageUrl": "https://picsum.photos/seed/volunteer/600/400",
+      "description": "I am a Volunteer image",
+      "imageUrl": "https://ibb.co/357x6GVV",
       "imageHint": "student volunteer"
     }
   ]
