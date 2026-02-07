@@ -1,5 +1,5 @@
 
-export type DonationStatus = 'Posted' | 'Claimed';
+export type DonationStatus = 'POSTED' | 'ACCEPTED' | 'PICKED_UP' | 'DELIVERED';
 
 export interface Donation {
   id: string;

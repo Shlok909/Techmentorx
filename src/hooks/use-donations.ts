@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Donation } from '@/types/donation';
+import { Donation, DonationStatus } from '@/types/donation';
 
 const STORAGE_KEY = 'mentorlink_donations';
 
@@ -20,6 +20,15 @@ export function useDonations() {
       }
     }
     setIsLoaded(true);
+
+    // Listen for storage changes in other tabs to keep dashboards in sync
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY && e.newValue) {
+        setDonations(JSON.parse(e.newValue));
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   const addDonation = (itemName: string, location: string) => {
@@ -27,7 +36,7 @@ export function useDonations() {
       id: Math.random().toString(36).substr(2, 9),
       itemName,
       location,
-      status: 'Posted',
+      status: 'POSTED',
       createdAt: new Date().toISOString(),
     };
     const updated = [newDonation, ...donations];
@@ -35,13 +44,13 @@ export function useDonations() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   };
 
-  const claimDonation = (id: string) => {
+  const updateDonationStatus = (id: string, newStatus: DonationStatus) => {
     const updated = donations.map((d) =>
-      d.id === id ? { ...d, status: 'Claimed' as const } : d
+      d.id === id ? { ...d, status: newStatus } : d
     );
     setDonations(updated);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   };
 
-  return { donations, addDonation, claimDonation, isLoaded };
+  return { donations, addDonation, updateDonationStatus, isLoaded };
 }

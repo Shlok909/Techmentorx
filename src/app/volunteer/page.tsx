@@ -10,7 +10,7 @@ import { Search, Globe } from 'lucide-react';
 
 export default function VolunteerDashboard() {
   const router = useRouter();
-  const { donations, claimDonation, isLoaded } = useDonations();
+  const { donations, updateDonationStatus, isLoaded } = useDonations();
 
   useEffect(() => {
     const role = localStorage.getItem('mentorlink_role');
@@ -19,6 +19,8 @@ export default function VolunteerDashboard() {
   }, [router]);
 
   if (!isLoaded) return null;
+
+  const activeDonationsCount = donations.filter(d => d.status !== 'DELIVERED').length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -33,7 +35,7 @@ export default function VolunteerDashboard() {
               <h1 className="text-3xl font-headline font-black">Find Resources</h1>
             </div>
             <p className="text-muted-foreground text-lg">
-              Browse items posted by community donors. Claim what you need to support your studies and personal growth.
+              Browse items posted by community donors. Help deliver items to students or claim resources for your studies.
             </p>
           </div>
 
@@ -41,17 +43,17 @@ export default function VolunteerDashboard() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Search className="w-5 h-5 text-primary" />
-                <h2 className="text-xl font-headline font-bold">Available Donations</h2>
+                <h2 className="text-xl font-headline font-bold">Manage Deliveries</h2>
               </div>
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                {donations.filter(d => d.status === 'Posted').length} active listings
+                {activeDonationsCount} active tasks
               </span>
             </div>
             
             <DonationList 
               donations={donations} 
               role="volunteer" 
-              onClaim={claimDonation} 
+              onUpdateStatus={updateDonationStatus} 
             />
           </div>
         </div>
