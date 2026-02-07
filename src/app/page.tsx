@@ -1,17 +1,17 @@
-
 "use client";
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { RoleCard } from '@/components/RoleCard';
-import { DonationList } from '@/components/DonationList';
 import { useDonations } from '@/hooks/use-donations';
-import { Heart, GraduationCap, HeartHandshake, Info } from 'lucide-react';
+import { Heart, GraduationCap, HeartHandshake, Search } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function HomePage() {
   const router = useRouter();
-  const { donations, isLoaded } = useDonations();
+  const { isLoaded } = useDonations();
 
   useEffect(() => {
     const role = localStorage.getItem('mentorlink_role');
@@ -40,6 +40,15 @@ export default function HomePage() {
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Connecting generous donors with dedicated student volunteers to empower education and community support.
           </p>
+          
+          <div className="pt-4">
+            <Link href="/donations">
+              <Button size="lg" variant="outline" className="rounded-full px-8 border-primary text-primary hover:bg-primary/5 font-semibold gap-2">
+                <Search className="w-5 h-5" />
+                View Available Donations
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mt-12">
@@ -60,24 +69,6 @@ export default function HomePage() {
             onClick={() => selectRole('volunteer')}
           />
         </div>
-
-        {isLoaded && (
-          <div className="mt-20 w-full text-left space-y-6">
-            <div className="flex items-center justify-between border-b pb-4">
-              <div className="flex items-center gap-2">
-                <Info className="text-primary w-6 h-6" />
-                <h2 className="text-3xl font-headline font-bold">Available Donations</h2>
-              </div>
-              <p className="text-sm text-muted-foreground bg-white px-3 py-1 rounded-full border shadow-sm">
-                Public View • Read Only
-              </p>
-            </div>
-            
-            <div className="bg-white/50 p-6 rounded-3xl border border-dashed border-primary/20">
-              <DonationList donations={donations} role="donor" />
-            </div>
-          </div>
-        )}
         
         <div className="pt-12 text-sm text-muted-foreground font-medium">
           Simple. Local. Community-focused.
